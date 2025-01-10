@@ -47,6 +47,11 @@ def main():
     model = whisper.load_model("base", device="cpu")
     print("Modelo carregado com sucesso!")
     
+    # Criar pasta de transcrições se não existir
+    pasta_transcricoes = "transcriptions"
+    if not os.path.exists(pasta_transcricoes):
+        os.makedirs(pasta_transcricoes)
+    
     # Encontrar todos os arquivos MP4 e MP3 no diretório atual
     arquivos_audio = glob.glob("*.mp4") + glob.glob("*.mp3")
     
@@ -61,7 +66,7 @@ def main():
         
         # Criar nome para arquivo de saída
         nome_base = os.path.splitext(audio_path)[0]
-        arquivo_saida = f"{nome_base}.txt"
+        arquivo_saida = os.path.join(pasta_transcricoes, f"{nome_base}.txt")
         
         try:
             # Transcrever áudio
