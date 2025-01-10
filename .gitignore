@@ -1,0 +1,6 @@
+*.txt
+*.mp4
+*.mp3
+!teste.mp3
+!teste.txt
+
