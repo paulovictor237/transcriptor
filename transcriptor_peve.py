@@ -28,6 +28,19 @@ def transcrever_audio(audio_path, model):
     except Exception as e:
         return f"Erro durante a transcrição: {str(e)}"
 
+def quebrar_linhas(texto, largura=80):
+    """Quebra o texto em linhas de no máximo 'largura' caracteres."""
+    linhas = []
+    for paragrafo in texto.split('\n'):
+        while len(paragrafo) > largura:
+            corte = paragrafo[:largura].rfind(' ')
+            if corte == -1:
+                corte = largura
+            linhas.append(paragrafo[:corte])
+            paragrafo = paragrafo[corte:].lstrip()
+        linhas.append(paragrafo)
+    return '\n'.join(linhas)
+
 def main():
     # Configuração do modelo Whisper
     print("Carregando modelo Whisper (isso pode levar alguns minutos na primeira vez)...")
@@ -53,10 +66,11 @@ def main():
         try:
             # Transcrever áudio
             transcricao = transcrever_audio(audio_path, model)
+            transcricao_formatada = quebrar_linhas(transcricao)
             
             # Salvar transcrição
             with open(arquivo_saida, 'w', encoding='utf-8') as f:
-                f.write(transcricao)
+                f.write(transcricao_formatada)
             
             print(f"✓ Transcrição salva com sucesso em: {arquivo_saida}")
             
